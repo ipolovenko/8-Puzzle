@@ -66,16 +66,20 @@ public class Board {
     // a board that is obtained by exchanging two adjacent blocks in the same row
     public Board twin() {
         Board twin = new Board();
-        int[] twinBoard = new int[length];
-        twinBoard[0] = board[1];
-        if (twinBoard[0] == 0) twin.zeroPos = 0;
-        twinBoard[1] = board[0];
-        if (twinBoard[1] == 0) twin.zeroPos = 1;
-        for (int i = 2; i < length; i++) {
-            twinBoard[i] = board[i];
-            if (twinBoard[i] == 0) twin.zeroPos = i;
+        twin.board = new int[length];
+        for (int i = 0; i < length; i++) {
+            twin.board[i] = board[i];
+            if (twin.board[i] == 0) twin.zeroPos = i;
         }
-        twin.board = twinBoard;
+        if (twin.zeroPos < 2) {
+            int exch = twin.board[N];
+            twin.board[N] = twin.board[N + 1];
+            twin.board[N + 1] = exch;
+        } else {
+            int exch = twin.board[0];
+            twin.board[0] = twin.board[1];
+            twin.board[1] = exch;
+        }
         twin.N = N;
         twin.length = length;
         return twin;

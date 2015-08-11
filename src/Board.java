@@ -16,8 +16,9 @@ public class Board {
         board = new int[N * N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                board[index++] = blocks[i][j];
+                board[index] = blocks[i][j];
                 if (board[index] == 0) zeroPos = index;
+                index++;
             }
         }
     }
@@ -95,9 +96,9 @@ public class Board {
     // all neighboring boards
     public Iterable<Board> neighbors() {
         Stack<Board> neighbors = new Stack<>();
-        if (zeroPos + 1 < length) neighbors.push(makeNeighbor(zeroPos + 1));
+        if (zeroPos + 1 < length && (zeroPos + 1) / N == zeroPos / N) neighbors.push(makeNeighbor(zeroPos + 1));
         if (zeroPos + N < length) neighbors.push(makeNeighbor(zeroPos + N));
-        if (zeroPos - 1 >= 0) neighbors.push(makeNeighbor(zeroPos - 1));
+        if (zeroPos - 1 >= 0 && (zeroPos - 1) / N == zeroPos / N) neighbors.push(makeNeighbor(zeroPos - 1));
         if (zeroPos - N >= 0) neighbors.push(makeNeighbor(zeroPos - N));
         return neighbors;
     }

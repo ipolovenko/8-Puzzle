@@ -1,8 +1,6 @@
-import java.util.Stack;
-
 public class Board {
 
-    private int N, length, zeroPos;
+    private int N, length, zeroPos, hamming = -1, manhattan = -1;
     private int[] board;
 
     private Board() {}
@@ -30,25 +28,29 @@ public class Board {
 
     // number of blocks out of place
     public int hamming() {
-        int hamming = 0;
-        for (int i = 0; i < length - 1; i++) {
-            if (i + 1 != board[i]) hamming++;
+        if (hamming == -1) {
+            hamming = 0;
+            for (int i = 0; i < length - 1; i++) {
+                if (i + 1 != board[i]) hamming++;
+            }
         }
         return hamming;
     }
 
     // sum of Manhattan distances between blocks and goal
     public int manhattan() {
-        int manhattan = 0;
-        for (int i = 0; i < length; i++) {
-            if (board[i] == 0) continue;
-            int a = board[i], pos = i + 1;
-            if (a != pos) {
-                int diff = a - pos;
-                if (diff < 0) diff = -diff;
-                int rows = diff / N;
-                manhattan += rows;
-                manhattan += diff - rows * N;
+        if (manhattan == -1) {
+            manhattan = 0;
+            for (int i = 0; i < length; i++) {
+                if (board[i] == 0) continue;
+                int a = board[i], pos = i + 1;
+                if (a != pos) {
+                    int diff = a - pos;
+                    if (diff < 0) diff = -diff;
+                    int rows = diff / N;
+                    manhattan += rows;
+                    manhattan += diff - rows * N;
+                }
             }
         }
         return manhattan;

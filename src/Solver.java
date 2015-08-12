@@ -22,8 +22,6 @@ public class Solver {
 
     private Node move(MinPQ<Node> mpq, boolean original) {
         Node minimumNode = mpq.delMin();
-        StdOut.println("Original = " + original);
-        StdOut.println("minimum = " + minimumNode.board);
         if (minimumNode.board.isGoal()) return minimumNode;
         for (Board neighbor : minimumNode.board.neighbors()) {
             if (original && previousBrd != null && previousBrd.equals(neighbor)) continue;
@@ -51,9 +49,9 @@ public class Solver {
         Node prevNode = solutionNode;
         Stack<Board> path = new Stack<>();
         path.push(prevNode.board);
-        while (prevNode.previosNode != null) {
-            path.push(prevNode.previosNode.board);
-            prevNode = prevNode.previosNode;
+        while (prevNode.previousNode != null) {
+            path.push(prevNode.previousNode.board);
+            prevNode = prevNode.previousNode;
         }
         return path;
     }
@@ -83,9 +81,8 @@ public class Solver {
     }
 
     private static class Node implements Comparable {
-
         private Board board;
-        private Node previosNode;
+        private Node previousNode;
         private int movesCount = 0;
 
         private Node(Board b) {
@@ -94,14 +91,16 @@ public class Solver {
 
         private Node(Node n, Board b) {
             board = b;
-            previosNode = n;
+            previousNode = n;
             movesCount = n.movesCount;
             movesCount++;
         }
 
         @Override
         public int compareTo(Object o) {
-            return board.manhattan() - ((Node)o).board.manhattan();
+            Node that = (Node)o;
+            int manhattanDiff = (board.manhattan() + movesCount) - (that.board.manhattan() + that.movesCount);
+            return manhattanDiff != 0 ? manhattanDiff : (board.hamming() + movesCount) - (that.board.hamming() + that.movesCount);
         }
     }
 }

@@ -45,15 +45,21 @@ public class Board {
                 if (board[i] == 0) continue;
                 int a = board[i], pos = i + 1;
                 if (a != pos) {
-                    int diff = a - pos;
-                    if (diff < 0) diff = -diff;
-                    int rows = diff / N;
+                    int rows = ceiling(a, N) - ceiling(pos, N);
+                    if (rows < 0) rows = -rows;
+                    int cols = (a - 1) % N - i % N;
+                    if (cols < 0) cols = -cols;
                     manhattan += rows;
-                    manhattan += diff - rows * N;
+                    manhattan += cols;
                 }
             }
         }
         return manhattan;
+    }
+
+    private int ceiling(int a, int b) {
+        int ceil = a / b;
+        return a % b != 0 ? ++ceil : ceil;
     }
 
     // is this board the goal board?
